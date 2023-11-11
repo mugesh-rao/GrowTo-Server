@@ -1,46 +1,27 @@
 // controllers/userController.js
-const User = require("../models/user.model");
+const User = require('../models/user.model');
 
-async function getUsers(req, res) {
+async function updateProfile(req, res) {
+  const { mobileNumber, dateOfBirth, address } = req.body;
   try {
-    let users = await User.find();
-    res.json(users);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ status: "error", error: "Failed to fetch users" });
-  }
-}
+ 
+    const user = await User.findOne({ mobileNumber });
+    if (!user) {
+      return res.status(400).json({ status: 'error', error: 'User not found' });
+    }
 
-async function registerUser(req, res) {
-  const { name, email, password } = req.body;
-  try {
-    const user = new User({
-      name,
-      email,
-      password,
-      created_at: new Date().toISOString(),
-    });
+    user.dateOfBirth = dateOfBirth;
+    user.address = address;
+
     await user.save();
-    res.json({ status: "ok" });
-  } catch (error) {
-    console.error("Error during registration:", error); // Log the specific error
-    res.status(500).json({ status: "error", error: "Registration failed" });
-  }
-}
-async function getUserById(req, res) {
-  try {
-    const id = req.params.id; // Retrieve the id parameter from the URL
-    const user = await User.findById(id); // Fetch the user by ID
-    res.json(user);
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({ status: "error", error: "Failed to fetch user" });
-  }
-}
 
+    res.json({ status: 'ok', message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ status: 'error', error: 'Profile update failed' });
+  }
+}
 
 module.exports = {
-  getUsers,
-  registerUser,
-  getUserById,
+  updateProfile,
 };

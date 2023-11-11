@@ -1,18 +1,24 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const MachineModel = new mongoose.Schema(
-  {
-    name: { type: String, },
-    category: { type: String },
-    price: { type: String },
-    review: { type: String },
-    img: { type: String },
-    location: { type: String }, // Add location field
-    driverName: { type: String }, // Add driverName field
-    ownerName: { type: String }, 
-    // Add ownerName field
-  },
-  { collection: "Machine", timestamps: true }
-);
+const machineSchema = new mongoose.Schema({
+  name: String,
+  category: String,
+  price: String,
+  review: String,
+  img: String,
+  location: String,
+  driverName: String,
+  ownerName: String,
+  season: String,
+  type: String,
+  brand: String,
+  description: String,
+  discountPrice: Number,
+  stock: Number,
+  shopId: String,
+  shop: Object,
+  sold_out: { type: Number, default: 0 },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'Owner' },
+}, { collection: 'Machine', timestamps: true });
 
-module.exports = mongoose.model("Machine", MachineModel);
+module.exports = mongoose.model('Machine', machineSchema);
