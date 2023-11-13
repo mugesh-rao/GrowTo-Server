@@ -14,7 +14,7 @@ async function addMachine(req, res) {
   const machineData = req.body;
   try {
     const machine = new Machine(machineData);
-    machine.owner = req.user.id; // Assuming you have user authentication
+    // machine.owner = req.user.id; 
     await machine.save();
     res.json({ status: 'ok' });
   } catch (error) {

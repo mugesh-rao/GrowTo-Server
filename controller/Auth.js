@@ -4,57 +4,40 @@ const { User } = require("../models/user.model"); // Import or create your User 
 const { generateOTP } = require("../utils/OTP");
 const axios = require("axios");
 
-async function registerUser(req, res) {
+
+async function Registration(req, res) {
   try {
     const { mobileNumber } = req.body;
 
     const existingUser = await User.findOne({ mobileNumber });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already registered." });
+      return res.status(400).json({ error: 'User already registered' });
     }
 
-    const verificationCode = generateOTP();
+    const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
 
-
+    // Create a new user object
     const newUser = new User({
-      mobileNumber,
+      mobileNumber: req.body.mobileNumber,
       verificationCode,
       isVerified: false,
     });
 
     await newUser.save();
+    const message = `🌱 Welcome to *Grow Guard!* 🚜\n\n`
+      + `Get ready to grow your farming journey with us. 🌾\n\n`
+      + `Your OTP  is: *${verificationCode}*`;
 
-    // Send the OTP to the user
-    const otpMessage = `Your OTP is: ${verificationCode}`;
-    const recipient = `+91${mobileNumber}`;
-    const apiKey = "rXbvAnSLLtdr";
-    const encodedMessage = encodeURIComponent(otpMessage);
-    const textMeBotUrl = `http://api.textmebot.com/send.php?recipient=${recipient}&apikey=${apiKey}&text=${encodedMessage}`;
+    const waLink = `http://api.textmebot.com/send.php?recipient=+91${req.body.mobileNumber}&apikey=ezTBGZEDoJxH&text=${encodeURIComponent(message)}`;
+    await axios.post(waLink);
 
-    const response = await axios.post(textMeBotUrl);
-
-    if (response.data && response.data.success) {
-      const token = jwt.sign(
-        { mobileNumber: newUser.mobileNumber },
-        jwtSecrettoken,
-        { expiresIn: "1h" }
-      );
-
-      res.status(200).json({
-        message: "OTP sent successfully",
-        token: token, 
-      });
-
-      res.status(200).json({ message: "OTP sent successfully" });
-    } else {
-      res.status(500).json({ message: "Failed to send OTP" });
-    }
+    res.json({ success: true, message: 'Registration successful' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
+
 
 async function verifyUser(req, res) {
   try {
@@ -72,25 +55,31 @@ async function verifyUser(req, res) {
     }
 
     user.isVerified = true;
+    user.token = jwtSecrettoken;
+    
+    const message = `🌱 User Allowed Succesfully !!🚜`;
 
+    const waLink = `http://api.textmebot.com/send.php?recipient=+91${req.body.mobileNumber}&apikey=ezTBGZEDoJxH&text=${encodeURIComponent(message)}`;
+    axios.post(waLink);
+    
     await user.save();
 
     // Generate a JWT token for the user
-    const token = jwt.sign(
-      { userId: user._id, mobileNumber: user.mobileNumber },
-      jwtSecrettoken,
-      { expiresIn: "1h" }
-    );
+    // const token = jwt.sign(
+    //   { userId: user._id, mobileNumber: user.mobileNumber },
+    //   jwtSecrettoken,
+    //   { expiresIn: "1h" }
+    // );
 
     res.status(200).json({
       message: "Mobile number verified successfully.",
-      token: token, // Include the token in the response
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
 
 async function loginUser(req, res) {
   const { mobileNumber, verificationCode } = req.body;
@@ -116,20 +105,19 @@ async function loginUser(req, res) {
     }
 
     // Generate a JWT token for the user
-    const token = jwt.sign(
-      { mobileNumber: user.mobileNumber },
-      jwtSecrettoken,
-      { expiresIn: "1h" }
-    );
+    // const token = jwt.sign(
+    //   { mobileNumber: user.mobileNumber },
+    //   jwtSecrettoken,
+    //   { expiresIn: "1h" }
+    // );
 
-    res.status(200).json({
-      message: "Login successful",
-      token: token,
-    });
+    // res.status(200).json({
+    //   message: "Login successful",
+    //   token: token,
+    // });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
-
-module.exports = { verifyUser, registerUser,loginUser };
+module.exports = { verifyUser, Registration,loginUser};

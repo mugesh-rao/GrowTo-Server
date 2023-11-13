@@ -14,6 +14,7 @@ const authController = require("./controller/Auth");
 const userController = require("./controller/user");
 const OwnerController = require("./controller/Owner");
 const errorHandler = require("./middlewares/errorHandlers");
+const { default: axios } = require("axios");
 
 app.get('/machines', machineController.getMachines);
 app.get('/machines/:id', machineController.getMachineById);
@@ -28,12 +29,13 @@ app.delete('/api/machines/delete/:id', machineController.DeleteMachine);
 
 app.get("api/profile/update", OwnerController.updateProfile);
 
-app.post("/api/register", authController.registerUser);
+app.post("/api/register", authController.Registration);
 app.post("/api/verify", authController.verifyUser);
-app.post("/api/login", authController.loginUser);
+
 
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`Server Running on http://localhost:${PORT}`);
+  console.log(`Server Running on http://localhost:${PORT}/machines`);
+  // axios.post(`http://api.textmebot.com/send.php?recipient=+916374380946&apikey=ezTBGZEDoJxH&text=testing`)
 });
