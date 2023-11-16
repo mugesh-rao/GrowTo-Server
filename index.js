@@ -10,15 +10,20 @@ app.use(express.json());
 connectToDatabase();
 
 const machineController = require("./controller/machine.controller");
-const authController = require("./controller/Auth");
+const authController = require("./controller/UserAuth");
 const userController = require("./controller/user");
 const OwnerController = require("./controller/Owner");
 const errorHandler = require("./middlewares/errorHandlers");
 const { default: axios } = require("axios");
+const { PlaceOrder } = require("./controller/Order");
 
 app.get('/machines', machineController.getMachines);
 app.get('/machines/:id', machineController.getMachineById);
 app.get("/profile/update", userController.updateProfile);
+app.post("/api/place-orders", PlaceOrder);
+
+app.post("/api/register", authController.Registration);
+app.post("/api/login", authController.loginUser);
 
 // Admin Routes
 
@@ -29,8 +34,7 @@ app.delete('/api/machines/delete/:id', machineController.DeleteMachine);
 
 app.get("api/profile/update", OwnerController.updateProfile);
 
-app.post("/api/register", authController.Registration);
-app.post("/api/verify", authController.verifyUser);
+
 
 
 app.use(errorHandler);

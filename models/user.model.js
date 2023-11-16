@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema(
     isVerified: Boolean,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+    address:String,
     verificationCode: String,
     boughtProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     favoriteProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" },

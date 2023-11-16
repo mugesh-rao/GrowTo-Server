@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const farmerSchema = new mongoose.Schema({
   name: String,
@@ -6,16 +6,16 @@ const farmerSchema = new mongoose.Schema({
   password: String,
   token: String,
   mobileNumber: {
-    type: String,
-    unique: true, 
+    type: Number,
+    unique: true,
   },
   isVerified: Boolean,
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-  verificationCode: String,
+  verificationCode:  { type: Number, default: 0 },
   address: String,
-  aadharNumber: String,
-  ownedMachines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Machine' }],
+  aadharNumber:  { type: Number, default: 0 },
+  ownedMachines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Machine" }],
 });
 
-module.exports = mongoose.model('Owners', farmerSchema);
+module.exports = mongoose.model("Owners", farmerSchema);

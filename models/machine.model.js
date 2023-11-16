@@ -3,9 +3,13 @@ const mongoose = require("mongoose");
 const machineSchema = new mongoose.Schema(
   {
     name: String,
-    category: String,
+    category: {
+      key: Number,
+      Name: String,
+      Img: String,
+    },
     modelyear: String,
-    price: String,
+    price:  { type: Number, default: 0 },
     review: String,
     img: String,
     location: String,
