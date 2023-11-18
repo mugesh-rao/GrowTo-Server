@@ -84,6 +84,30 @@ async function loginUser(req, res) {
   }
 }
 
+async function createProfile(req, res) {
+  try {
+    const mobileNumber = req.query.ph; // Extract mobile number from request parameters
 
+    const user = await User.findOne({ mobileNumber });
 
-module.exports = { Registration, loginUser };
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update the user's profile with the submitted data
+    user.name = req.body.name;
+    user.address = req.body.address;
+    user.aadharNumber = req.body.aadharNumber;
+    user.noOfAcres = req.body.noOfAcres;
+    user.dob = req.body.dob;
+
+    await user.save();
+
+    res.json({ success: true, message: 'Profile created successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+module.exports = { Registration, loginUser,createProfile };

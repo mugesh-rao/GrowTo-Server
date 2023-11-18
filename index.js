@@ -23,6 +23,7 @@ app.get("/profile/update", userController.updateProfile);
 app.post("/api/place-orders", PlaceOrder);
 
 app.post("/api/register", authController.Registration);
+app.post("/api/createprofile", authController.createProfile);
 app.post("/api/login", authController.loginUser);
 
 // Admin Routes

@@ -8,15 +8,19 @@ const userSchema = new mongoose.Schema(
     name: String,
     email: String,
     password: String,
+    aadharNumber:String ,
+    noOfAcres: Number,
     token: String,
     mobileNumber: String,
     isVerified: Boolean,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
-    address:String,
+    address: String,
+    dob:String,
     verificationCode: String,
     boughtProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-    favoriteProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+    favoriteProducts: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
     ],
   },
   { collection: "Users", timestamps: true }
@@ -40,7 +44,8 @@ userSchema.methods.getResetToken = function () {
     .update(resetToken)
     .digest("hex");
 
-  this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;  minutes
+  this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+  minutes;
 
   return resetToken;
 };
