@@ -15,16 +15,17 @@ const userController = require("./controller/user");
 const OwnerController = require("./controller/Owner");
 const errorHandler = require("./middlewares/errorHandlers");
 const { default: axios } = require("axios");
-const { PlaceOrder } = require("./controller/Order");
+const { PlaceOrder, getUserOrders } = require("./controller/Order");
 
 app.get('/machines', machineController.getMachines);
 app.get('/machines/:id', machineController.getMachineById);
 app.get("/profile/update", userController.updateProfile);
 app.post("/api/place-orders", PlaceOrder);
+app.get("/api/user-orders/:userId", getUserOrders);
 
 app.post("/api/register", authController.Registration);
-app.post("/api/createprofile", authController.createProfile);
 app.post("/api/login", authController.loginUser);
+app.post("/api/createprofile", authController.createProfile);
 
 // Admin Routes
 

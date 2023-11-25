@@ -49,33 +49,30 @@ async function loginUser(req, res) {
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
-
-    // user.isVerified = true;
-
-
-    // if (user.isVerified) {
-    //   return res.status(400).json({ message: "User is not verified" });
-    // }
-
     // Check the verification code
     const codeMatch = user.verificationCode === verificationCode;
-
     if (!codeMatch) {
       return res.status(400).json({ message: "Invalid verification code" });
     }
-
     // Generate a JWT token for the user
     const token = jwt.sign(
       { userId: user._id, mobileNumber: user.mobileNumber },
       jwtSecrettoken,
-      { expiresIn: "1h" } // Set the expiration time as needed
+      { expiresIn: "1h" } 
     );
+
     res.status(200).json({
-      message: "Login successful",
+      message: 'Login successful',
       token: token,
-      user: {
-        id: user._id,
+      userProfile: {
+        name: user.name,
+        address: user.address,
+        aadharNumber: user.aadharNumber,
+        noOfAcres: user.noOfAcres,
+        dob: user.dob,
+        _id: user._id,  
         mobileNumber: user.mobileNumber,
+        // Include other profile data as needed
       },
     });
   } catch (error) {

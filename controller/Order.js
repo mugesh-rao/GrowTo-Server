@@ -1,16 +1,16 @@
 const OrdersModel = require("../models/Orders.model");
-const Owner = require("../models/Owner.model"); // Adjust the import
+const Owner = require("../models/Owner.model");
 
 async function PlaceOrder(req, res) {
   try {
-    // Assuming req.body contains necessary order information
-    const { userId, machineId, quantity, totalPrice, deliveryAddress } =
+   
+    const { userID, machineID, quantity, totalPrice, deliveryAddress } =
       req.body;
 
     // Create the order
     const order = new OrdersModel({
-      user: userId,
-      machine: machineId,
+      userID: userID,
+      machineID: machineID,
       quantity,
       totalPrice,
       deliveryAddress,
@@ -20,13 +20,13 @@ async function PlaceOrder(req, res) {
     await order.save();
 
     // Find the owner to get the provider information
-    const owner = await Owner.findById(userId); // Assuming userId is the owner's ID
+    // const owner = await Owner.findById(userId); 
 
-    // Check if the owner is also a provider
-    if (owner.ownedMachines.length > 0) {
-      // Implement logic to notify the provider (send notification, email, etc.)
-      console.log(`Order notification sent to owner/provider: ${owner.name}`);
-    }
+    // // Check if the owner is also a provider
+    // if (owner.ownedMachines.length > 0) {
+    //   // Implement logic to notify the provider (send notification, email, etc.)
+    //   console.log(`Order notification sent to owner/provider: ${owner.name}`);
+    // }
 
     return res.status(201).json({ success: true, order });
   } catch (error) {
@@ -37,6 +37,22 @@ async function PlaceOrder(req, res) {
   }
 }
 
+async function getUserOrders(req, res) {
+  try {
+    const userId = req.params.userId;
+
+    // Fetch orders for the given user ID
+    const orders = await OrdersModel.find({ userID: userId }).exec();
+
+    return res.status(200).json({ success: true, orders });
+  } catch (error) {
+    console.error("Error fetching user orders:", error);
+    return res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+}
+
+
 module.exports = {
   PlaceOrder,
+  getUserOrders
 };
