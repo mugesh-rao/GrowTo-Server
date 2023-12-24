@@ -49,5 +49,5 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server Running on http://localhost:${PORT}/machines`);
-  // axios.post(`http://api.textmebot.com/send.php?recipient=+916374380946&apikey=ezTBGZEDoJxH&text=testing`)
+  // axios.post(`http://api.textmebot.com/send.php?recipient=+916374380946&apikey=Hwd2BzkcxSY4&text=testing`)
 });
