@@ -10,31 +10,37 @@ app.use(express.json());
 connectToDatabase();
 
 const machineController = require("./controller/machine.controller");
-const authController = require("./controller/UserAuth");
+const UserAuth = require("./controller/UserAuth");
+const OwnerUserAuth = require("./controller/OwnerAuth");
 const userController = require("./controller/user");
-const OwnerController = require("./controller/Owner");
+
 const errorHandler = require("./middlewares/errorHandlers");
+
+const { PlaceOrder, getUserOrders, getAdminOrders } = require("./controller/Order");
 const { default: axios } = require("axios");
-const { PlaceOrder, getUserOrders } = require("./controller/Order");
 
 app.get('/machines', machineController.getMachines);
-app.get('/machines/:id', machineController.getMachineById);
+app.get('/getmachines/:id', machineController.getMachineById);
 app.get("/profile/update", userController.updateProfile);
 app.post("/api/place-orders", PlaceOrder);
 app.get("/api/user-orders/:userId", getUserOrders);
 
-app.post("/api/register", authController.Registration);
-app.post("/api/login", authController.loginUser);
-app.post("/api/createprofile", authController.createProfile);
+app.post("/api/register", UserAuth.Registration);
+app.post("/api/login", UserAuth.loginUser);
+app.post("/api/createprofile", UserAuth.createProfile);
 
 // Admin Routes
 
+app.post("/api/admin/register", OwnerUserAuth.ownerRegistration);
+app.post("/api/admin/login", OwnerUserAuth.ownerLogin);
+app.post("/api/admin/createprofile", OwnerUserAuth.createOwnerProfile);
 
 app.post('/api/machines/add', machineController.addMachine);
 app.put('/api/machines/edit/:id', machineController.EditMachine);
 app.delete('/api/machines/delete/:id', machineController.DeleteMachine);
+app.get("/api/admin-orders/:adminId", getAdminOrders);
 
-app.get("api/profile/update", OwnerController.updateProfile);
+app.get("api/profile/update", OwnerUserAuth.updateProfile);
 
 
 

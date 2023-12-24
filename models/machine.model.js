@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 
+// Schema for booked dates
+const bookedDateSchema = new mongoose.Schema({
+  startDate: Date,
+  endDate: Date,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, 
+  bookingStatus: { type: String, enum: ["pending", "accepted", "rejected"], default: "pending" },
+});
+
+// Schema for machines
 const machineSchema = new mongoose.Schema(
   {
     name: String,
@@ -9,7 +18,7 @@ const machineSchema = new mongoose.Schema(
       Img: String,
     },
     modelyear: String,
-    price:  { type: Number, default: 0 },
+    price: { type: Number, default: 0 },
     review: String,
     img: String,
     location: String,
@@ -24,7 +33,8 @@ const machineSchema = new mongoose.Schema(
     discountPrice: Number,
     shop: Object,
     sold_out: { type: Number, default: 0 },
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: "Owner" },
+    ownerID: { type: mongoose.Schema.Types.ObjectId, ref: "Owner" },
+    bookedDates: [bookedDateSchema], 
   },
   { collection: "Machine", timestamps: true }
 );

@@ -1,26 +1,20 @@
-// controllers/ownerController.js
-const Owner = require('../models/Owner.model');
+const Machine = require("../models/machine.model");
 
-async function updateProfile(req, res) {
-  const { mobileNumber, dateOfBirth, address } = req.body;
+async function getMachineById(req, res) {
   try {
-    const owner = await Owner.findOne({ mobileNumber });
-    if (!owner) {
-      return res.status(400).json({ status: 'error', error: 'Owner not found' });
+    const machineId = req.params.id;
+    console.log(machineId);
+    // Check if machineId is a valid ObjectId
+    // if (!mongoose.Types.ObjectId.isValid(machineId)) {
+    //   return res.status(400).json({ error: "Invalid machineId" });
+    // }
+    const machine = await Machine.findById(machineId);
+    if (!machine) {
+      return res.status(404).json({ error: "Machine not found" });
     }
-
-    owner.dateOfBirth = dateOfBirth;
-    owner.address = address;
-
-    await owner.save();
-
-    res.json({ status: 'ok', message: 'Profile updated successfully' });
+    res.status(200).json(machine);
   } catch (error) {
-    console.error('Error updating owner profile:', error);
-    res.status(500).json({ status: 'error', error: 'Profile update failed' });
+    console.error("Error fetching machine:", error);
+    res.status(500).json({ error: "Failed to fetch machine" });
   }
 }
-
-module.exports = {
-  updateProfile,
-};

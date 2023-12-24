@@ -4,13 +4,14 @@ const Owner = require("../models/Owner.model");
 async function PlaceOrder(req, res) {
   try {
    
-    const { userID, machineID, quantity, totalPrice, deliveryAddress } =
+    const { userID, machineID, quantity, totalPrice, deliveryAddress,ownerID } =
       req.body;
 
     // Create the order
     const order = new OrdersModel({
       userID: userID,
       machineID: machineID,
+      ownerID: ownerID,
       quantity,
       totalPrice,
       deliveryAddress,
@@ -51,8 +52,22 @@ async function getUserOrders(req, res) {
   }
 }
 
+async function getAdminOrders(req, res) {
+  try {
+    const adminId = req.params.adminId;
+
+    // Fetch orders for the given admin ID
+    const orders = await OrdersModel.find({ ownerID: adminId }).exec();
+
+    return res.status(200).json({ success: true, orders });
+  } catch (error) {
+    console.error("Error fetching admin orders:", error);
+    return res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+}
 
 module.exports = {
   PlaceOrder,
-  getUserOrders
+  getUserOrders,
+  getAdminOrders
 };

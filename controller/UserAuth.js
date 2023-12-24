@@ -27,7 +27,7 @@ async function Registration(req, res) {
       + `Get ready to grow your farming journey with us. 🌾\n\n`
       + `Your OTP  is: *${verificationCode}*`;
 
-    const waLink = `http://api.textmebot.com/send.php?recipient=+91${req.body.mobileNumber}&apikey=ezTBGZEDoJxH&text=${encodeURIComponent(message)}`;
+    const waLink = `http://api.textmebot.com/send.php?recipient=+91${req.body.mobileNumber}&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
     await axios.post(waLink);
 
 

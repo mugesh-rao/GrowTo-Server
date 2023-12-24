@@ -1,21 +1,49 @@
 const mongoose = require("mongoose");
 
-const farmerSchema = new mongoose.Schema({
+const attendanceSchema = new mongoose.Schema({
+  date: Date,
+  status: { type: String, enum: ["Present", "Absent", "Undecided"] },
+  reasonForAbsence: String,
+});
+
+const salarySchema = new mongoose.Schema({
+  baseSalary: Number,
+  bonuses: Number,
+  extraAmount: Number,
+});
+
+const locationSchema = new mongoose.Schema({
+  latitude: Number,
+  longitude: Number,
+  timestamp: { type: Date, default: Date.now },
+});
+
+const employeeSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  phoneNumber: String,
+  employeeId: { type: String, unique: true },
+  attendance: [attendanceSchema],
+  salary: salarySchema,
+  location: locationSchema,
+});
+
+const ownerSchema = new mongoose.Schema({
   name: String,
   email: String,
   password: String,
   token: String,
-  mobileNumber: {
-    type: Number,
-    unique: true,
-  },
+  mobileNumber: String,
   isVerified: Boolean,
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-  verificationCode:  { type: Number, default: 0 },
+  verificationCode: String,
   address: String,
-  aadharNumber:  { type: Number, default: 0 },
+  aadharNumber: Number,
   ownedMachines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Machine" }],
+  employees: [employeeSchema],
 });
 
-module.exports = mongoose.model("Owners", farmerSchema);
+const Owner = mongoose.model("owners", ownerSchema);
+
+module.exports = Owner;
