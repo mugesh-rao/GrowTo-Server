@@ -18,6 +18,7 @@ const errorHandler = require("./middlewares/errorHandlers");
 
 const { PlaceOrder, getUserOrders, getAdminOrders } = require("./controller/Order");
 const { default: axios } = require("axios");
+const { addFeedback } = require("./controller/feedback");
 
 app.get('/machines', machineController.getMachines);
 app.get('/getmachines/:id', machineController.getMachineById);
@@ -28,6 +29,8 @@ app.get("/api/user-orders/:userId", getUserOrders);
 app.post("/api/register", UserAuth.Registration);
 app.post("/api/login", UserAuth.loginUser);
 app.post("/api/createprofile", UserAuth.createProfile);
+
+app.post('/api/feedback',addFeedback );
 
 // Admin Routes
 
