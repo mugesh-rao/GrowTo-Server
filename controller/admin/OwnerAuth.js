@@ -1,7 +1,7 @@
-const { jwtSecrettoken } = require("../helpers/generateKeys");
+const { jwtSecrettoken } = require("../../helpers/generateKeys");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
-const Owner  = require("../models/Owner.model");
+const Owner = require("../../models/Owner.model");
 
 async function ownerRegistration(req, res) {
   try {
@@ -43,7 +43,6 @@ async function ownerRegistration(req, res) {
 async function ownerLogin(req, res) {
   const { mobileNumber, verificationCode } = req.body;
 
-
   try {
     const owner = await Owner.findOne({ mobileNumber });
 
@@ -65,9 +64,9 @@ async function ownerLogin(req, res) {
 
     res.status(200).json({
       message: "Owner login successful",
-      token : token,
-      AdminId:owner._id,
-      AdminProfile:owner,
+      token: token,
+      AdminId: owner._id,
+      AdminProfile: owner,
     });
   } catch (error) {
     console.error(error);
@@ -105,7 +104,9 @@ async function updateProfile(req, res) {
   try {
     const owner = await Owner.findOne({ mobileNumber });
     if (!owner) {
-      return res.status(400).json({ status: 'error', error: 'Owner not found' });
+      return res
+        .status(400)
+        .json({ status: "error", error: "Owner not found" });
     }
 
     owner.dateOfBirth = dateOfBirth;
@@ -113,11 +114,16 @@ async function updateProfile(req, res) {
 
     await owner.save();
 
-    res.json({ status: 'ok', message: 'Profile updated successfully' });
+    res.json({ status: "ok", message: "Profile updated successfully" });
   } catch (error) {
-    console.error('Error updating owner profile:', error);
-    res.status(500).json({ status: 'error', error: 'Profile update failed' });
+    console.error("Error updating owner profile:", error);
+    res.status(500).json({ status: "error", error: "Profile update failed" });
   }
 }
 
-module.exports = { ownerRegistration, ownerLogin, createOwnerProfile ,updateProfile};
+module.exports = {
+  ownerRegistration,
+  ownerLogin,
+  createOwnerProfile,
+  updateProfile,
+};

@@ -1,4 +1,4 @@
-const Machine = require("../models/machine.model");
+const Machine = require("../../models/machine.model");
 
 async function getMachineById(req, res) {
   try {

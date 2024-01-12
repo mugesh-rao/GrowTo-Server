@@ -1,6 +1,6 @@
-const { jwtSecrettoken } = require("../helpers/generateKeys");
+const { jwtSecrettoken } = require("../../helpers/generateKeys");
 const jwt = require("jsonwebtoken");
-const { User } = require("../models/user.model");
+const { User } = require("../../models/user.model");
 const axios = require("axios");
 
 async function Registration(req, res) {
@@ -10,7 +10,7 @@ async function Registration(req, res) {
     const existingUser = await User.findOne({ mobileNumber });
 
     if (existingUser) {
-      return res.status(400).json({ error: 'User already registered' });
+      return res.status(400).json({ error: "User already registered" });
     }
 
     const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
@@ -18,25 +18,25 @@ async function Registration(req, res) {
     const newUser = new User({
       mobileNumber: req.body.mobileNumber,
       verificationCode,
-      isVerified: false, 
+      isVerified: false,
     });
 
     await newUser.save();
 
-    const message = `🌱 Welcome to *Grow Guard!* 🚜\n\n`
-      + `Get ready to grow your farming journey with us. 🌾\n\n`
-      + `Your OTP  is: *${verificationCode}*`;
+    const message =
+      `🌱 Welcome to *Grow Guard!* 🚜\n\n` +
+      `Get ready to grow your farming journey with us. 🌾\n\n` +
+      `Your OTP  is: *${verificationCode}*`;
 
-    const waLink = `http://api.textmebot.com/send.php?recipient=+91${req.body.mobileNumber}&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
+    const waLink = `http://api.textmebot.com/send.php?recipient=+91${
+      req.body.mobileNumber
+    }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
     await axios.post(waLink);
 
-
-
-    
-    res.json({ success: true, message: 'Registration successful'});
+    res.json({ success: true, message: "Registration successful" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 
@@ -58,11 +58,11 @@ async function loginUser(req, res) {
     const token = jwt.sign(
       { userId: user._id, mobileNumber: user.mobileNumber },
       jwtSecrettoken,
-      { expiresIn: "1h" } 
+      { expiresIn: "1h" }
     );
 
     res.status(200).json({
-      message: 'Login successful',
+      message: "Login successful",
       token: token,
       userProfile: {
         name: user.name,
@@ -70,7 +70,7 @@ async function loginUser(req, res) {
         aadharNumber: user.aadharNumber,
         noOfAcres: user.noOfAcres,
         dob: user.dob,
-        _id: user._id,  
+        _id: user._id,
         mobileNumber: user.mobileNumber,
         // Include other profile data as needed
       },
@@ -88,7 +88,7 @@ async function createProfile(req, res) {
     const user = await User.findOne({ mobileNumber });
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     // Update the user's profile with the submitted data
@@ -100,11 +100,11 @@ async function createProfile(req, res) {
 
     await user.save();
 
-    res.json({ success: true, message: 'Profile created successfully' });
+    res.json({ success: true, message: "Profile created successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 
-module.exports = { Registration, loginUser,createProfile };
+module.exports = { Registration, loginUser, createProfile };

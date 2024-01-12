@@ -3,6 +3,19 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { jwtSecrettoken, refreshToken } = require("../helpers/generateKeys"); // Import environment variables
 
+const addressSchema = new mongoose.Schema(
+  {
+    flat: String,
+    landmark: String,
+    city: String,
+    district: String,
+    type: { type: String, enum: ['home', 'office', 'other'] },
+    name: String,
+    mobileNumber: String,
+  },
+  { _id: false }
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: String,
@@ -15,8 +28,8 @@ const userSchema = new mongoose.Schema(
     isVerified: Boolean,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
-    address: String,
-    dob:String,
+    addresses: [addressSchema],
+        dob:String,
     verificationCode: String,
     boughtProducts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     favoriteProducts: [

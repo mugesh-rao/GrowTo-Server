@@ -1,14 +1,26 @@
 const mongoose = require("mongoose");
 
-// Schema for booked dates
 const bookedDateSchema = new mongoose.Schema({
   startDate: Date,
   endDate: Date,
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, 
-  bookingStatus: { type: String, enum: ["pending", "accepted", "rejected"], default: "pending" },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  bookingStatus: {
+    type: String,
+    enum: ["pending", "accepted", "rejected"],
+    default: "pending",
+  },
 });
 
-// Schema for machines
+const reviewSchema = new mongoose.Schema({
+  reviewerName: String,
+  reviewerProfilePic: String,
+  reviewerJoiningDate: Date,
+  ratings: Number,
+  reviewText: String,
+  reviewDate: { type: Date, default: Date.now },
+  helpfulCount: Number,
+});
+
 const machineSchema = new mongoose.Schema(
   {
     name: String,
@@ -19,7 +31,7 @@ const machineSchema = new mongoose.Schema(
     },
     modelyear: String,
     price: { type: Number, default: 0 },
-    review: String,
+    reviews: [reviewSchema], 
     img: String,
     location: String,
     driverName: String,
@@ -34,7 +46,8 @@ const machineSchema = new mongoose.Schema(
     shop: Object,
     sold_out: { type: Number, default: 0 },
     ownerID: { type: mongoose.Schema.Types.ObjectId, ref: "Owner" },
-    bookedDates: [bookedDateSchema], 
+    bookedDates: [bookedDateSchema],
+    withDriver: { type: Boolean, default: false },
   },
   { collection: "Machine", timestamps: true }
 );
