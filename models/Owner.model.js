@@ -18,15 +18,7 @@ const locationSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
 });
 
-const employeeSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  phoneNumber: String,
-  employeeId: { type: String, unique: true },
-  attendance: [attendanceSchema],
-  salary: salarySchema,
-  location: locationSchema,
-});
+
 
 const ownerSchema = new mongoose.Schema({
   name: String,
@@ -41,7 +33,7 @@ const ownerSchema = new mongoose.Schema({
   address: String,
   aadharNumber: Number,
   ownedMachines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Machine" }],
-  employees: [employeeSchema],
+
 });
 
 const Owner = mongoose.model("owners", ownerSchema);

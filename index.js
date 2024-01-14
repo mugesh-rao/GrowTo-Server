@@ -12,12 +12,12 @@ connectToDatabase();
 const errorHandler = require("./middlewares/errorHandlers");
 
 const userRoutes = require('./Router/userRoutes');
-const adminRoutes = require('./Router/adminRoutes');
+const ProviderRoutes = require('./Router/ProviderRoutes');
 
 
 
 app.use('/api/user', userRoutes);
-app.use('/api/admin',adminRoutes );
+app.use('/api/provider',ProviderRoutes );
 
 app.use(errorHandler);
 

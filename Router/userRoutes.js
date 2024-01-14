@@ -25,11 +25,11 @@ router.delete("/deleteAddress", deleteAddress);
 router.get("/machines", machineController.getMachines);
 router.get("/getmachines/:id", machineController.getMachineById);
 router.get("/profile/update", userController.updateProfile);
-router.post("/api/place-orders", PlaceOrder);
-router.get("/api/user-orders/:userId", getUserOrders);
-router.post("/api/register", UserAuth.Registration);
-router.post("/api/login", UserAuth.loginUser);
-router.post("/api/createprofile", UserAuth.createProfile);
-router.post("/api/feedback", addFeedback);
+router.post("/place-orders", PlaceOrder);
+router.get("/user-orders/:userId", getUserOrders);
+router.post("/register", UserAuth.Registration);
+router.post("/login", UserAuth.loginUser);
+router.post("/createprofile", UserAuth.createProfile);
+router.post("/feedback", addFeedback);
 
 module.exports = router;

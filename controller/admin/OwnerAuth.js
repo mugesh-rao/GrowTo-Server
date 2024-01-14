@@ -10,7 +10,7 @@ async function ownerRegistration(req, res) {
     const existingOwner = await Owner.findOne({ mobileNumber });
 
     if (existingOwner) {
-      return res.status(400).json({ error: "Owner already registered" });
+      return res.status(400).json({ error: 'Owner already registered' });
     }
 
     const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
@@ -26,17 +26,18 @@ async function ownerRegistration(req, res) {
     const message =
       `🌱 Welcome to *Grow Guard!* 🚜\n\n` +
       `Get ready to grow your farming journey with us. 🌾\n\n` +
-      `Your OTP  is: *${verificationCode}*`;
+      `Your OTP is: *${verificationCode}*`;
 
     const waLink = `http://api.textmebot.com/send.php?recipient=+91${
       req.body.mobileNumber
     }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
+
     await axios.post(waLink);
 
-    res.json({ success: true, message: "Owner registration successful" });
+    res.json({ success: true, message: 'Owner registration successful' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
