@@ -85,11 +85,22 @@ async function getMachineById(req, res) {
     res.status(500).json({ error: "Failed to fetch machine" });
   }
 }
+async function getMachinesByAdminID(req, res) {
+  try {
+    const adminID = req.params.adminID; 
+    const machines = await Machine.find({ ownerID: adminID }).exec();
 
+    res.status(200).json(machines);
+  } catch (error) {
+    console.error("Error fetching machines by admin ID:", error);
+    res.status(500).json({ status: "error", error: "Failed to fetch machines by admin ID" });
+  }
+}
 module.exports = {
   getMachines,
   addMachine,
   getMachineById,
   EditMachine,
-  DeleteMachine
+  DeleteMachine,
+  getMachinesByAdminID
 };

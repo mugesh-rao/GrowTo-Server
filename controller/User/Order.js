@@ -59,11 +59,12 @@ async function getUserOrders(req, res) {
   }
 }
 
+// Update the server-side function
 async function getAdminOrders(req, res) {
   try {
     const adminId = req.params.adminId;
 
-    // Fetch orders for the given admin ID
+    // Replace OrdersModel with your actual model for orders
     const orders = await OrdersModel.find({ ownerID: adminId }).exec();
 
     return res.status(200).json({ success: true, orders });
@@ -74,6 +75,7 @@ async function getAdminOrders(req, res) {
       .json({ success: false, error: "Internal Server Error" });
   }
 }
+
 
 module.exports = {
   PlaceOrder,
