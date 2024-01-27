@@ -12,11 +12,14 @@ async function PlaceOrder(req, res) {
       ownerID,
     } = req.body;
 
+   
+    const sanitizedOwnerID = ownerID || null;
+
     // Create the order
     const order = new OrdersModel({
       userID: userID,
       machineID: machineID,
-      ownerID: ownerID,
+      ownerID: sanitizedOwnerID,
       quantity,
       totalPrice,
       deliveryAddress,
@@ -25,23 +28,25 @@ async function PlaceOrder(req, res) {
     // Save the order to the database
     await order.save();
 
-    // Find the owner to get the provider information
-    // const owner = await Owner.findById(userId);
-
-    // // Check if the owner is also a provider
-    // if (owner.ownedMachines.length > 0) {
-    //   // Implement logic to notify the provider (send notification, email, etc.)
+    // If you want to find the owner, uncomment the following lines
+    // const owner = await Owner.findById(ownerID);
+    // if (owner && owner.ownedMachines.length > 0) {
     //   console.log(`Order notification sent to owner/provider: ${owner.name}`);
     // }
 
     return res.status(201).json({ success: true, order });
   } catch (error) {
     console.error("Error placing order:", error);
-    return res
-      .status(500)
-      .json({ success: false, error: "Internal Server Error" });
+
+    // Handle specific error cases if needed
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ success: false, error: error.message });
+    }
+
+    return res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 }
+
 
 async function getUserOrders(req, res) {
   try {

@@ -24,8 +24,8 @@ async function Registration(req, res) {
     await newUser.save();
 
     const message =
-      `🌱 Welcome to *Grow Guard!* 🚜\n\n` +
-      `Get ready to grow your farming journey with us. 🌾\n\n` +
+      `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
+      `Get ready to grow your farming journey with us. 🌾\n\n` +`Use This OTP for Login \n\n` +
       `Your OTP  is: *${verificationCode}*`;
 
     const waLink = `http://api.textmebot.com/send.php?recipient=+91${
