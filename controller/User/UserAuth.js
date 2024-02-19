@@ -19,6 +19,11 @@ async function Registration(req, res) {
       mobileNumber: req.body.mobileNumber,
       verificationCode,
       isVerified: false,
+      name: null,
+      email: null,
+      password: null,
+      aadharNumber: null,
+      noOfAcres: null,
     });
 
     await newUser.save();
@@ -39,6 +44,76 @@ async function Registration(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
+async function loginOrRegisterUser(req, res) {
+  const { mobileNumber, verificationCode } = req.body;
+
+  try {
+    let user = await User.findOne({ mobileNumber });
+
+    if (!user) {
+      // If user is not found, create a new user and send OTP
+      const newVerificationCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+      const newUser = new User({
+        mobileNumber: req.body.mobileNumber,
+        verificationCode: newVerificationCode,
+        isVerified: false,
+        name: null,
+        email: null,
+        password: null,
+        aadharNumber: null,
+        noOfAcres: null,
+      });
+
+      await newUser.save();
+
+      const message =
+        `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
+        `Get ready to grow your farming journey with us. 🌾\n\n` +`Use This OTP for Login \n\n` +
+        `Your OTP  is: *${newVerificationCode}*`;
+
+      const waLink = `http://api.textmebot.com/send.php?recipient=+91${
+        req.body.mobileNumber
+      }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
+      await axios.post(waLink);
+
+      return res.json({ success: true, message: "Registration successful. Please enter the OTP received." });
+    }
+
+    // If user is found, check the verification code
+    const codeMatch = user.verificationCode === verificationCode;
+    if (!codeMatch) {
+      return res.status(400).json({ message: "Invalid verification code" });
+    }
+
+    // If verification code is correct, generate JWT token for login
+    const token = jwt.sign(
+      { userId: user._id, mobileNumber: user.mobileNumber },
+      jwtSecrettoken,
+      { expiresIn: "1h" }
+    );
+
+    return res.status(200).json({
+      message: "Login successful",
+      token: token,
+      userProfile: {
+        name: user.name,
+        address: user.address,
+        aadharNumber: user.aadharNumber,
+        noOfAcres: user.noOfAcres,
+        dob: user.dob,
+        _id: user._id,
+        mobileNumber: user.mobileNumber,
+        // Include other profile data as needed
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 
 async function loginUser(req, res) {
   const { mobileNumber, verificationCode } = req.body;

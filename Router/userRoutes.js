@@ -17,6 +17,12 @@ const {
   getUserOrders,
   getAdminOrders,
 } = require("../controller/User/Order");
+const { UPIPayment } = require("../controller/User/Payment");
+const Multer = require("multer");
+const uploadFile = require("../utils/mutler");
+
+const upload = Multer({ storage: Multer.memoryStorage() });
+const app = express();
 
 router.post("/addAddress", addAddress);
 router.get("/getAddresses/:mobileNumber", getAddresses);
@@ -31,5 +37,7 @@ router.post("/register", UserAuth.Registration);
 router.post("/login", UserAuth.loginUser);
 router.post("/createprofile", UserAuth.createProfile);
 router.post("/feedback", addFeedback);
+router.post("/upi-payment", UPIPayment);
+
 
 module.exports = router;
