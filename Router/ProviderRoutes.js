@@ -12,8 +12,9 @@ const {
 const Multer = require("multer");
 const upload = Multer({ storage: Multer.memoryStorage() });
 
-router.post("/register", OwnerUserAuth.ownerRegistration);
-router.post("/login", OwnerUserAuth.ownerLogin);
+router.post("/register", OwnerUserAuth.OwnerRegistration);
+router.post("/sendotp", OwnerUserAuth.sendOTP);
+router.post("/login", OwnerUserAuth.Ownerlogin);
 router.post("/createprofile", OwnerUserAuth.createOwnerProfile);
 router.get("/profile/update", OwnerUserAuth.updateProfile);
 
