@@ -86,6 +86,7 @@ async function AcceptOrder(req, res) {
     return res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 }
+
 async function RejectOrder(req, res) {
   try {
     const orderId = req.params.orderId;
