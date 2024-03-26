@@ -17,7 +17,7 @@ const {
   getUserOrders,
   getAdminOrders,
 } = require("../controller/User/Order");
-const { UPIPayment } = require("../controller/User/Payment");
+const { UPIPayment, initiateCashfreePayment, Payments, createCashfreeOrder } = require("../controller/User/Payment");
 const Multer = require("multer");
 const uploadFile = require("../utils/mutler");
 
@@ -37,7 +37,8 @@ router.post("/register", UserAuth.Registration);
 router.post("/login", UserAuth.loginUser);
 router.post("/createprofile", UserAuth.createProfile);
 router.post("/feedback", addFeedback);
-router.post("/upi-payment", UPIPayment);
+router.post("/upi-payment", initiateCashfreePayment);
+router.post("/payment", createCashfreeOrder);
 
 
 module.exports = router;

@@ -22,8 +22,7 @@ async function OwnerRegistration(req, res) {
       name: null,
       email: null,
       password: null,
-      aadharNumber: null,
-      noOfAcres: null,
+     
     });
 
     await newUser.save();
@@ -105,15 +104,11 @@ async function Ownerlogin(req, res) {
     res.status(200).json({
       message: "Login successful",
       token: token,
-      userProfile: {
-        name: user.name,
-        address: user.address,
-        aadharNumber: user.aadharNumber,
-        noOfAcres: user.noOfAcres,
-        dob: user.dob,
+      AdminProfile: {
+      
         _id: user._id,
         mobileNumber: user.mobileNumber,
-        // Include other profile data as needed
+        
       },
     });
   } catch (error) {
@@ -136,16 +131,24 @@ async function createOwnerProfile(req, res) {
     owner.name = req.body.name;
     owner.email = req.body.email;
     owner.address = req.body.address;
-    owner.aadharNumber = req.body.aadharNumber;
+    owner.ownerType = req.body.ownerType;
+   
+    if (owner.ownerType === 'Business') {
+      owner.businessName = req.body.businessName;
+      owner.district = req.body.district;
+      owner.pinCode = req.body.pinCode;
+      owner.gstNumber = req.body.gstNumber;
+    }
 
     await owner.save();
 
-    res.json({ success: true, message: "Owner profile created successfully" });
+    res.json({ success: true, message: "Owner profile updated successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
+
 
 async function updateProfile(req, res) {
   const { mobileNumber, dateOfBirth, address } = req.body;

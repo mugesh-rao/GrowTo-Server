@@ -31,7 +31,12 @@ const ownerSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
   verificationCode: String,
   address: String,
-  aadharNumber: Number,
+  ownerType: { type: String, enum: ['Individual', 'Business'] }, // New field to distinguish between individual and business
+  businessName: String, // Only applicable for businesses
+  district: String,
+  pinCode: String,
+  gstNumber: String,
+
   ownedMachines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Machine" }],
 
 });

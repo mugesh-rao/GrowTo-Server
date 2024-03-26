@@ -47,6 +47,15 @@ const machineSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    location: {
+      type: { type: String, default: "Point" },
+      coordinates: [Number],
+    },
+    approvalStatus: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+    },
     postingDate: { type: Date, default: Date.now },
     season: String,
     cropType: String,

@@ -50,7 +50,7 @@ const addMachine = async (req, res) => {
       ownerID,
     } = req.body;
     const GTID = await generateUniqueMachineID();
-
+    const { latitude, longitude } = location;
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
 
@@ -64,6 +64,10 @@ const addMachine = async (req, res) => {
       season,
       location,
       ownerName,
+      location: {
+        type: "Point",
+        coordinates: [longitude, latitude], // Note: GeoJSON uses [longitude, latitude]
+      },
       description,
       discountPrice,
       ownerID,
@@ -82,8 +86,60 @@ const addMachine = async (req, res) => {
     res.status(500).json({ status: "error", error: "Failed to add machine" });
   }
 };
+// Approve a machine listing
+async function approveMachine(req, res) {
+  const { machineId } = req.params;
+  try {
+    const updatedMachine = await Machine.findByIdAndUpdate(machineId, { approvalStatus: 'approved' }, { new: true });
+    if (!updatedMachine) {
+      return res.status(404).json({ error: 'Machine not found' });
+    }
+    res.json(updatedMachine);
+  } catch (error) {
+    console.error("Error approving machine:", error);
+    res.status(500).json({ status: "error", error: "Failed to approve machine" });
+  }
+}
+
+// Reject a machine listing
+async function rejectMachine(req, res) {
+  const { machineId } = req.params;
+  try {
+    const updatedMachine = await Machine.findByIdAndUpdate(machineId, { approvalStatus: 'rejected' }, { new: true });
+    if (!updatedMachine) {
+      return res.status(404).json({ error: 'Machine not found' });
+    }
+    res.json(updatedMachine);
+  } catch (error) {
+    console.error("Error rejecting machine:", error);
+    res.status(500).json({ status: "error", error: "Failed to reject machine" });
+  }
+}
 
 
+async function getNearbyMachines(req, res) {
+  try {
+    const { lat, lng } = req.query; // Latitude and Longitude from request query
+    const radius = 50 / 6378.1; // Convert 50 km radius to radians for MongoDB query
+
+    const machines = await Machine.find({
+      location: {
+        $nearSphere: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lng), parseFloat(lat)] // Ensure lng and lat are parsed as floats
+          },
+          $maxDistance: radius // Use radius calculated in radians
+        }
+      }
+    });
+
+    res.json(machines); // Send the nearby machines as response
+  } catch (error) {
+    console.error("Error fetching nearby machines:", error);
+    res.status(500).json({ status: "error", error: "Failed to fetch nearby machines" });
+  }
+}
 
 
 async function EditMachine(req, res) {
@@ -170,5 +226,6 @@ module.exports = {
   EditMachine,
   DeleteMachine,
   getMachinesByAdminID,
+  getNearbyMachines,approveMachine,rejectMachine
 
 };
