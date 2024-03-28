@@ -31,12 +31,68 @@ const ownerSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
   verificationCode: String,
   address: String,
-  ownerType: { type: String, enum: ['Individual', 'Business'] }, // New field to distinguish between individual and business
-  businessName: String, // Only applicable for businesses
+  businessName: String,
   district: String,
   pinCode: String,
   gstNumber: String,
-
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    country: String,
+    pinCode: String,
+  },
+  ownerType: { type: String, enum: ['Individual', 'Business'], required: true },
+  businessDetails: {
+    businessName: String,
+    gstNumber: String,
+    taxId: String, 
+    businessAddress: String,
+  },
+  bankDetails: { 
+    accountHolderName: String,
+    accountNumber: String,
+    ifscCode: String,
+    bankName: String,
+    branchName: String,
+  },
+  ownedMachines: [{
+    machineId: { type: mongoose.Schema.Types.ObjectId, ref: "Machine" },
+    registrationDate: Date,
+    machineDetails: {
+      make: String,
+      model: String,
+      yearOfManufacture: Date,
+      machineType: String,
+      operationalStatus: { type: String, enum: ["Operational", "Under Maintenance", "Out of Service"], default: "Operational" },
+    },
+    insuranceDetails: { 
+      provider: String,
+      policyNumber: String,
+      validTill: Date,
+    },
+    complianceCertificates: [{
+      certificateName: String,
+      issuedBy: String,
+      issueDate: Date,
+      expiryDate: Date,
+      certificateNumber: String,
+    }],
+  }],
+  operationalAreas: [{ 
+    district: String,
+    state: String,
+    country: String,
+  }],
+  profileCompleted: { type: Boolean, default: false },
+  location: {
+    type: { type: String, default: "Point" },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      index: '2dsphere'
+    }
+  },
+  createdAt: { type: Date, default: Date.now },
   ownedMachines: [{ type: mongoose.Schema.Types.ObjectId, ref: "Machine" }],
 
 });

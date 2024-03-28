@@ -12,6 +12,7 @@ const addressSchema = new mongoose.Schema(
     type: { type: String, enum: ["home", "office", "other"] },
     name: String,
     mobileNumber: String,
+    
   },
   { _id: false }
 );
@@ -28,6 +29,7 @@ const userSchema = new mongoose.Schema(
     isVerified: Boolean,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+
     addresses: [addressSchema],
     dob: String,
     verificationCode: String,
@@ -63,6 +65,6 @@ userSchema.methods.getResetToken = function () {
   return resetToken;
 };
 
-const User = mongoose.model("User", userSchema);
+module.exports =  mongoose.model("User", userSchema);
 
-module.exports = { User };
+

@@ -5,44 +5,113 @@ const orderSchema = new mongoose.Schema(
     userID: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     ownerID: { type: mongoose.Schema.Types.ObjectId, ref: "Owners" },
     machineID: { type: mongoose.Schema.Types.ObjectId, ref: "Machine" },
-    quantity: { type: Number, default: 1 },
+    totaldays: { type: Number, default: 1 },
     totalPrice: { type: Number },
     isDelivered: { type: Boolean, default: false },
+    ProductID: String,
+    orderID: String,
+    fromDate: Date,
+    toDate: Date,
+    acceptedAt: Date,
+    totalHours: Number,
+    paymentToken: String,
+    estimatedArrival: Date,
+    actualArrival: Date,
+    completionTime: Date,
     deliveryAddress: String,
-    paymentStatus: {
+    supportContact: String,
+    mobileNumber: String,
+    deliveryDetails: {
+      estimatedDeliveryDate: Date,
+      actualDeliveryDate: Date,
+      deliveryStatus: {
+        type: String,
+        enum: ["Pending", "In Transit", "Delivered"],
+        default: "Pending",
+      },
+    },
+
+    incidentReports: [
+      {
+        date: Date,
+        description: String,
+        resolved: { type: Boolean, default: false },
+      },
+    ],
+    cancellation: {
+      isCancelled: { type: Boolean, default: false },
+      cancelledBy: {
+        type: String,
+        enum: ["Renter", "Owner", "System"],
+        default: "System",
+      },
+      reason: String,
+      cancelledAt: Date,
+    },
+    issues: [
+      {
+        reportedAt: Date,
+        description: String,
+        resolved: { type: Boolean, default: false },
+      },
+    ],
+    status: {
       type: String,
-      enum: ["pending", "paid"],
-      default: "pending",
+      enum: ["Pending", "Accepted", "Cancelled", "Completed"],
+      default: "Pending",
+    },
+
+    payment: {
+      amount: Number,
+      method: String,
+      status: {
+        type: String,
+        enum: ["Pending", "Paid", "Refunded"],
+        default: "Pending",
+      },
+      transactionId: String,
     },
     orderDate: { type: Date, default: Date.now },
     user: {
       name: String,
       email: String,
     },
-    OrderStatus: {
+
+    paymentStatus: {
       type: String,
-      enum: ["pending", "Accepted","Rejected"],
+      enum: ["pending", "processing", "confirmed", "failed"],
       default: "pending",
     },
-    requestDate: Date,
-    paymentReceived: Number,
-    ProductID: String,
-    orderID: String,
-    contactNumber: String,
-    requestedAddress: String,
-    requestedTime: String,
-    fromDate: Date,
-    toDate: Date,
-    mobileNumber: String,
-    totalAcres: Number,
-    totalDays: Number,
-    totalHours: Number,
-    paymentToken: String,
+
+    providerDetails: {
+      name: String,
+      contactInfo: String,
+      vehicleDetails: {
+        type: String,
+        model: String,
+        color: String,
+        plateNumber: String,
+      },
+    },
+
+    paymentInfo: {
+      amount: Number,
+      method: String,
+      status: String,
+    },
     paymentMethod: {
       type: String,
       enum: ["credit_card", "debit_card", "wallet", "other"],
       default: "other",
     },
+    feedback: {
+      userRating: Number,
+      providerRating: Number,
+      userComments: String,
+      providerComments: String,
+    },
+
+  
   },
   { collection: "Orders", timestamps: true }
 );

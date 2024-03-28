@@ -3,12 +3,9 @@ const express = require("express");
 const router = express.Router();
 const OwnerUserAuth = require("../controller/admin/OwnerAuth");
 const machineController = require("../controller/machine.controller");
-const {
 
-  ViewOrder,
-} = require("../controller/User/Order");
 const Multer = require("multer");
-const { getAdminOrders, AcceptOrder, RejectOrder } = require("../controller/admin/AdminOrders");
+const { getAdminOrders, AcceptOrder, RejectOrder, ViewOrder } = require("../controller/admin/AdminOrders");
 const upload = Multer({ storage: Multer.memoryStorage() });
 
 router.post("/register", OwnerUserAuth.OwnerRegistration);

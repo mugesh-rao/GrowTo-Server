@@ -10,7 +10,40 @@ const bookedDateSchema = new mongoose.Schema({
     default: "pending",
   },
 });
+const bookingSchema = new mongoose.Schema({
+  startDate: Date,
+  endDate: Date,
+  
+  renter: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  status: {
+    type: String,
+    enum: ["Pending", "Accepted", "In Use", "Completed", "Cancelled"],
+    default: "Pending",
+  },
+  priceAtBooking: Number,
+  cancellationDetails: {
+    cancelledBy: String,
+    cancellationReason: String,
+    cancellationDate: Date,
+  },
+  logistics: {
+    deliveryStatus: { type: String, enum: ["Pending", "Dispatched", "Delivered"], default: "Pending" },
+    returnStatus: { type: String, enum: ["Pending", "Dispatched", "Returned"], default: "Pending" },
+    deliveryProvider: String,
+    trackingDetails: String,
+  },
+  feedback: {
+    rating: Number,
+    review: String,
+    submittedOn: Date,
+  },
+});
 
+const maintenanceLogSchema = new mongoose.Schema({
+  date: Date,
+  description: String,
+  actionTaken: String,
+});
 const reviewSchema = new mongoose.Schema({
   reviewerName: String,
   reviewerProfilePic: String,
@@ -58,7 +91,14 @@ const machineSchema = new mongoose.Schema(
     },
     postingDate: { type: Date, default: Date.now },
     season: String,
-    cropType: String,
+    availabilityStatus: {
+      type: String,
+      enum: ["Available", "In Use", "Maintenance", "Unavailable"],
+      default: "Available",
+    },
+    bookings: [bookingSchema],
+    maintenanceLogs: [maintenanceLogSchema],
+   
     brand: String,
     description: String,
     isVerified: { type: Boolean, default: false },
@@ -68,10 +108,16 @@ const machineSchema = new mongoose.Schema(
     ownerID: { type: mongoose.Schema.Types.ObjectId, ref: "Owner" },
     bookedDates: [bookedDateSchema],
     withDriver: { type: Boolean, default: false },
+    
   },
   { collection: "Machine", timestamps: true }
 );
 
 // Add indexes if needed
 
-module.exports = mongoose.model("Machine", machineSchema);
+module.exports  = mongoose.model("Machine", machineSchema);
+
+
+
+
+
