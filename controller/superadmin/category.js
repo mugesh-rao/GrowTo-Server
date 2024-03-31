@@ -86,6 +86,83 @@ exports.deleteCategory = async (req, res) => {
     }
 };
 
-// Optional: Add methods for specifically managing subcategories if necessary,
-// such as adding a new subcategory to an existing category,
-// updating a subcategory, or removing a subcategory.
+exports.addSubcategory = async (req, res) => {
+    const { categoryId } = req.params;
+    const { name } = req.body; // The new subcategory name
+
+    try {
+        const category = await Category.findById(categoryId);
+        if (!category) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        let imgUrl = ''; // Placeholder for the image URL
+
+        // Check if there's an image file in the request
+        if (req.file) {
+            const b64 = Buffer.from(req.file.buffer).toString("base64");
+            const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+
+            // Upload the file to Cloudinary
+            const cldRes = await handleUpload(dataURI, "Subcategories"); // Adjust the folder as needed
+            imgUrl = cldRes ? cldRes.secure_url : ''; // Use the secure_url from Cloudinary response if available
+        }
+
+        // Push new subcategory with name and optionally imgUrl if an image was uploaded
+        category.subcategories.push({ name, imgUrl });
+
+        await category.save();
+        res.status(201).json({ message: 'Subcategory added successfully', category });
+    } catch (error) {
+        console.error("Error adding subcategory:", error);
+        res.status(500).json({ error: 'Failed to add subcategory' });
+    }
+};
+
+exports.updateSubcategory = async (req, res) => {
+    const { categoryId, subcategoryId } = req.params;
+    const { name, imgUrl } = req.body;
+
+    try {
+        const category = await Category.findById(categoryId);
+
+        if (!category) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        const subcategoryIndex = category.subcategories.findIndex(sub => sub._id.toString() === subcategoryId);
+
+        if (subcategoryIndex === -1) {
+            return res.status(404).json({ message: 'Subcategory not found' });
+        }
+
+        // Update subcategory fields
+        if (name) category.subcategories[subcategoryIndex].name = name;
+        if (imgUrl) category.subcategories[subcategoryIndex].imgUrl = imgUrl;
+
+        await category.save();
+        res.status(200).json({ message: 'Subcategory updated successfully', category });
+    } catch (error) {
+        console.error("Error updating subcategory:", error);
+        res.status(500).json({ error: 'Failed to update subcategory' });
+    }
+};
+exports.deleteSubcategory = async (req, res) => {
+    const { categoryId, subcategoryId } = req.params;
+
+    try {
+        const category = await Category.findById(categoryId);
+
+        if (!category) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        category.subcategories = category.subcategories.filter(sub => sub._id.toString() !== subcategoryId);
+
+        await category.save();
+        res.status(200).json({ message: 'Subcategory deleted successfully', category });
+    } catch (error) {
+        console.error("Error deleting subcategory:", error);
+        res.status(500).json({ error: 'Failed to delete subcategory' });
+    }
+};

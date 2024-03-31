@@ -28,7 +28,7 @@ const SuperAdminRoutes = require('./Router/SuperAdmin');
 
 app.use('/api/user', userRoutes);
 app.use('/api/provider',ProviderRoutes );
-app.use('/api/provider',SuperAdminRoutes );
+app.use('/api/superadmin',SuperAdminRoutes );
 
 app.use(errorHandler);
 // cloudinary.uploader.upload("https://upload.wikimedia.org/wikipedia/commons/a/ae/Olympic_flag.jpg",
