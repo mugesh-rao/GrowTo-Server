@@ -6,7 +6,18 @@ const axios = require("axios");
 const PORT = process.env.PORT || 1000;
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: ['https://growto.in', 'http://localhost:3000',"https://admin.growto.in"],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+  credentials: true, 
+  optionsSuccessStatus: 200 
+};
+
+app.use(cors(corsOptions)); 
+
+
+
 app.use(express.json());
 connectToDatabase();
 const cloudinary = require('cloudinary').v2;

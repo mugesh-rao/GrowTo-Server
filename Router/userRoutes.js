@@ -35,6 +35,7 @@ router.post("/place-orders", PlaceOrder);
 router.get("/user-orders/:userId", getUserOrders);
 router.post("/register", UserAuth.Registration);
 router.post("/login", UserAuth.loginUser);
+router.post("/sendOTP", UserAuth.sendOtpToUser);
 router.post("/createprofile", UserAuth.createProfile);
 router.post("/feedback", addFeedback);
 router.post("/upi-payment", initiateCashfreePayment);

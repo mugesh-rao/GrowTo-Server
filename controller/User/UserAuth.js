@@ -130,7 +130,16 @@ async function loginUser(req, res) {
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
-    // Check the verification code
+    const message =
+    `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
+    `Get ready to grow your farming journey with us. 🌾\n\n` +
+    `Use This OTP for Login \n\n` +
+    `Your OTP  is: *${user.verificationCode}*`;
+
+  const waLink = `http://api.textmebot.com/send.php?recipient=+91${
+    mobileNumber
+  }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
+  await axios.post(waLink);
     const codeMatch = user.verificationCode === verificationCode;
     if (!codeMatch) {
       return res.status(400).json({ message: "Invalid verification code" });
@@ -161,7 +170,30 @@ async function loginUser(req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
+async function sendOtpToUser(req,res) {
+  const { mobileNumber } = req.body;
 
+  try {
+    const user = await User.findOne({ mobileNumber });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const message =
+    `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
+    `Get ready to grow your farming journey with us. 🌾\n\n` +
+    `Use This OTP for Login \n\n` +
+    `Your OTP  is: *${user.verificationCode}*`;
+
+  const waLink = `http://api.textmebot.com/send.php?recipient=+91${
+    mobileNumber
+  }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
+  await axios.post(waLink);
+
+  } catch (error) {
+    console.error('Error in sendOtpToUser:', error.message);
+    throw error; // Rethrow the error for the caller to handle
+  }
+}
 async function createProfile(req, res) {
   try {
     const mobileNumber = req.query.ph; // Extract mobile number from request parameters
@@ -188,4 +220,4 @@ async function createProfile(req, res) {
   }
 }
 
-module.exports = { Registration, loginUser, createProfile };
+module.exports = { Registration, loginUser, createProfile ,sendOtpToUser};
