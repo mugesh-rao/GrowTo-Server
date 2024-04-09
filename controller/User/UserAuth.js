@@ -1,12 +1,12 @@
 const { jwtSecrettoken } = require("../../helpers/generateKeys");
 const jwt = require("jsonwebtoken");
-const { User } = require("../../models/user.model");
+const User = require('../../models/UserModel');
 const axios = require("axios");
 
 async function Registration(req, res) {
   try {
     const { mobileNumber } = req.body;
-
+   
     const existingUser = await User.findOne({ mobileNumber });
 
     if (existingUser) {
@@ -30,7 +30,8 @@ async function Registration(req, res) {
 
     const message =
       `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
-      `Get ready to grow your farming journey with us. 🌾\n\n` +`Use This OTP for Login \n\n` +
+      `Get ready to grow your farming journey with us. 🌾\n\n` +
+      `Use This OTP for Login \n\n` +
       `Your OTP  is: *${verificationCode}*`;
 
     const waLink = `http://api.textmebot.com/send.php?recipient=+91${
@@ -53,7 +54,9 @@ async function loginOrRegisterUser(req, res) {
 
     if (!user) {
       // If user is not found, create a new user and send OTP
-      const newVerificationCode = Math.floor(1000 + Math.random() * 9000).toString();
+      const newVerificationCode = Math.floor(
+        1000 + Math.random() * 9000
+      ).toString();
 
       const newUser = new User({
         mobileNumber: req.body.mobileNumber,
@@ -70,7 +73,8 @@ async function loginOrRegisterUser(req, res) {
 
       const message =
         `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
-        `Get ready to grow your farming journey with us. 🌾\n\n` +`Use This OTP for Login \n\n` +
+        `Get ready to grow your farming journey with us. 🌾\n\n` +
+        `Use This OTP for Login \n\n` +
         `Your OTP  is: *${newVerificationCode}*`;
 
       const waLink = `http://api.textmebot.com/send.php?recipient=+91${
@@ -78,7 +82,10 @@ async function loginOrRegisterUser(req, res) {
       }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
       await axios.post(waLink);
 
-      return res.json({ success: true, message: "Registration successful. Please enter the OTP received." });
+      return res.json({
+        success: true,
+        message: "Registration successful. Please enter the OTP received.",
+      });
     }
 
     // If user is found, check the verification code
@@ -113,7 +120,6 @@ async function loginOrRegisterUser(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
-
 
 async function loginUser(req, res) {
   const { mobileNumber, verificationCode } = req.body;

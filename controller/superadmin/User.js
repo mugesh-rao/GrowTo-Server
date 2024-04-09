@@ -1,16 +1,16 @@
-const Users = require('../../models/user.model'); // Update the path based on your structure
+const Users = require("../../models/UserModel"); // Update the path based on your structure
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const providers = await Users.find(); 
+    const providers = await Users.find();
     res.status(200).json({
-      status: 'success',
+      status: "success",
       results: providers.length,
-      users
+      users,
     });
   } catch (err) {
     res.status(404).json({
-      status: 'fail',
+      status: "fail",
       message: err,
     });
   }

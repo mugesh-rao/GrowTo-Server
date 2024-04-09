@@ -1,5 +1,5 @@
 // controllers/userController.js
-const User = require("../../models/user.model");
+const User = require("../../models/UserModel");
 
 async function updateProfile(req, res) {
   const { mobileNumber, dateOfBirth, address } = req.body;

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const { jwtSecrettoken, refreshToken } = require("../helpers/generateKeys"); // Import environment variables
+const { jwtSecrettoken,  refreshtoken } = require("../helpers/generateKeys"); // Import environment variables
 
 const addressSchema = new mongoose.Schema(
   {
@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema(
 // Generate and return a JSON Web Token (JWT) for the user
 userSchema.methods.getJWTToken = function () {
   return jwt.sign({ id: this._id }, jwtSecrettoken, {
-    expiresIn: refreshToken, // Use refreshToken from environment variables
+    expiresIn: refreshtoken, // Use refreshToken from environment variables
   });
 };
 

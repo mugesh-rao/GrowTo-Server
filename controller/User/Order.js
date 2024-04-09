@@ -1,7 +1,7 @@
 const OrdersModel = require("../../models/Orders.model");
 const Owner = require("../../models/Owner.model");
 const Machine = require("../../models/machine.model");
-const User = require("../../models/user.model");
+const User = require("../../models/UserModel");
 
 async function generateUniqueOrderID() {
   // Find the latest order in the database to determine the next counter value
