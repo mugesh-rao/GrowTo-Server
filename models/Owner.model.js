@@ -42,7 +42,7 @@ const ownerSchema = new mongoose.Schema({
     country: String,
     pinCode: String,
   },
-  ownerType: { type: String, enum: ['Individual', 'Business'], required: true },
+  ownerType: { type: String, enum: ['Individual', 'Business'] },
   businessDetails: {
     businessName: String,
     gstNumber: String,

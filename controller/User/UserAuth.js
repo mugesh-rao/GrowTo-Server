@@ -130,16 +130,7 @@ async function loginUser(req, res) {
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
-    const message =
-    `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
-    `Get ready to grow your farming journey with us. 🌾\n\n` +
-    `Use This OTP for Login \n\n` +
-    `Your OTP  is: *${user.verificationCode}*`;
 
-  const waLink = `http://api.textmebot.com/send.php?recipient=+91${
-    mobileNumber
-  }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
-  await axios.post(waLink);
     const codeMatch = user.verificationCode === verificationCode;
     if (!codeMatch) {
       return res.status(400).json({ message: "Invalid verification code" });
