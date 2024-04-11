@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 1000;
 
 const app = express();
 const corsOptions = {
-  origin: ['https://growto.in', 'http://localhost:3000',"https://admin.growto.in"],
+  origin: ['https://growto.in', 'http://localhost:3000',"http://localhost:5173","https://admin.growto.in"],
   methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   allowedHeaders: ['Content-Type', 'Authorization'], 
   credentials: true, 

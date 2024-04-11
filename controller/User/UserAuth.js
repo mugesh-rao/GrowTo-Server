@@ -204,7 +204,7 @@ async function createProfile(req, res) {
 
     await user.save();
 
-    res.json({ success: true, message: "Profile created successfully" });
+    res.json({ success: true, message: "Profile created successfully",user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
