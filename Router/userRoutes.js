@@ -3,9 +3,9 @@ const express = require("express");
 const router = express.Router();
 const {
   addAddress,
-  getAddresses,
   editAddress,
   deleteAddress,
+  getAddresses,
 } = require("../controller/User/userAddress");
 const machineController = require("../controller/machine.controller");
 const { addFeedback } = require("../controller/User/feedback");
@@ -25,7 +25,7 @@ const upload = Multer({ storage: Multer.memoryStorage() });
 const app = express();
 
 router.post("/addAddress", addAddress);
-router.get("/getAddresses/:mobileNumber", getAddresses);
+router.get("/getAddresses/:userId", getAddresses);
 router.put("/editAddress", editAddress);
 router.delete("/deleteAddress", deleteAddress);
 router.get("/machines", machineController.getMachines);

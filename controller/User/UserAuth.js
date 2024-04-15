@@ -187,7 +187,7 @@ async function sendOtpToUser(req,res) {
 }
 async function createProfile(req, res) {
   try {
-    const mobileNumber = req.query.ph; // Extract mobile number from request parameters
+    const mobileNumber = req.query.ph; 
 
     const user = await User.findOne({ mobileNumber });
 
@@ -204,7 +204,15 @@ async function createProfile(req, res) {
 
     await user.save();
 
-    res.json({ success: true, message: "Profile created successfully",user });
+    res.json({ success: true, message: "Profile created successfully", user: {
+      _id:user._id,
+      name: user.name,
+      address: user.address,
+      aadharNumber: user.aadharNumber,
+      noOfAcres: user.noOfAcres,
+      dob: user.dob,
+      mobileNumber:user.mobileNumber
+    } });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });

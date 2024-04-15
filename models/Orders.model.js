@@ -101,8 +101,8 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["credit_card", "debit_card", "wallet", "other"],
-      default: "other",
+      enum: ["credit_card", "debit_card", "wallet", "other","COD","UPI"],
+      default: "COD",
     },
     feedback: {
       userRating: Number,

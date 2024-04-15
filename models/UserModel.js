@@ -6,6 +6,7 @@ const { jwtSecrettoken,  refreshtoken } = require("../helpers/generateKeys"); //
 const addressSchema = new mongoose.Schema(
   {
     flat: String,
+
     landmark: String,
     city: String,
     district: String,
@@ -14,7 +15,7 @@ const addressSchema = new mongoose.Schema(
     mobileNumber: String,
     
   },
-  { _id: false }
+ 
 );
 
 const userSchema = new mongoose.Schema(
