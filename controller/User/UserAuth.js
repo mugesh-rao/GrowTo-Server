@@ -29,14 +29,16 @@ async function Registration(req, res) {
     await newUser.save();
 
     const message =
-      `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
-      `Get ready to grow your farming journey with us. 🌾\n\n` +
-      `Use This OTP for Login \n\n` +
+   
       `Your OTP  is: *${verificationCode}*`;
-
+// const message =
+//       `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
+//       `Get ready to grow your farming journey with us. 🌾\n\n` +
+//       `Use This OTP for Login \n\n` +
+//       `Your OTP  is: *${verificationCode}*`;
     const waLink = `http://api.textmebot.com/send.php?recipient=+91${
       req.body.mobileNumber
-    }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
+    }&apikey=xqVoHxJtM417&text=${encodeURIComponent(message)}`;
     await axios.post(waLink);
 
     res.json({ success: true, message: "Registration successful" });
@@ -71,15 +73,18 @@ async function loginOrRegisterUser(req, res) {
 
       await newUser.save();
 
-      const message =
-        `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
-        `Get ready to grow your farming journey with us. 🌾\n\n` +
-        `Use This OTP for Login \n\n` +
-        `Your OTP  is: *${newVerificationCode}*`;
+      // const message =
+      //   `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
+      //   `Get ready to grow your farming journey with us. 🌾\n\n` +
+      //   `Use This OTP for Login \n\n` +
+      //   `Your OTP  is: *${newVerificationCode}*`;
+
+        const message =
+            `Your OTP  is: *${newVerificationCode}*`;
 
       const waLink = `http://api.textmebot.com/send.php?recipient=+91${
         req.body.mobileNumber
-      }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
+      }&apikey=xqVoHxJtM417&text=${encodeURIComponent(message)}`;
       await axios.post(waLink);
 
       return res.json({
@@ -169,15 +174,17 @@ async function sendOtpToUser(req,res) {
     if (!user) {
       throw new Error('User not found');
     }
+    // const message =
+    // `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
+    // `Get ready to grow your farming journey with us. 🌾\n\n` +
+    // `Use This OTP for Login \n\n` +
+    // `Your OTP  is: *${user.verificationCode}*`;
     const message =
-    `🌱 Welcome to *GrowTo.in!* 🚜\n\n` +
-    `Get ready to grow your farming journey with us. 🌾\n\n` +
-    `Use This OTP for Login \n\n` +
-    `Your OTP  is: *${user.verificationCode}*`;
 
+    `Your OTP  is: *${user.verificationCode}*`;
   const waLink = `http://api.textmebot.com/send.php?recipient=+91${
     mobileNumber
-  }&apikey=Hwd2BzkcxSY4&text=${encodeURIComponent(message)}`;
+  }&apikey=xqVoHxJtM417&text=${encodeURIComponent(message)}`;
   await axios.post(waLink);
 
   } catch (error) {
