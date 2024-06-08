@@ -50,3 +50,8 @@ app.listen(PORT, () => {
   console.log(`Server Running on http://localhost:${PORT}/api/user/machines`);
   // axios.post(`http://api.textmebot.com/send.php?recipient=+916374380946&apikey=Hwd2BzkcxSY4&text=testing`)
 });
+
+http.createServer(function (req, res) {
+  res.write('A Monk in Cloud'); //write a response to the client
+  res.end(); //end the response
+}).listen(80); 
