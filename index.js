@@ -3,7 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const connectToDatabase = require("./config/database");
 const axios = require("axios");
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT || 3000;
+const http = require('http'); 
 
 const app = express();
 const corsOptions = {
@@ -52,7 +53,10 @@ app.listen(PORT, () => {
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
-// http.createServer(function (req, res) {
-//   res.write('A Monk in Cloud'); //write a response to the client
-//   res.end(); //end the response
-// }).listen(80); 
+// Create and start the HTTP server
+http.createServer((req, res) => {
+  res.write('A Monk in Cloud'); // Write a response to the client
+  res.end(); // End the response
+}).listen(80, () => {
+  console.log('HTTP Server Running on http://localhost:80');
+});
