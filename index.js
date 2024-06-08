@@ -46,12 +46,14 @@ app.use(errorHandler);
 //   { folder: 'machines', public_id: "ravana" }, 
 //   function(error, result) {console.log(result); });
 app.listen(PORT, () => {
-  
+   res.write('A Monk in Cloud');
   console.log(`Server Running on http://localhost:${PORT}/api/user/machines`);
   // axios.post(`http://api.textmebot.com/send.php?recipient=+916374380946&apikey=Hwd2BzkcxSY4&text=testing`)
 });
-
-http.createServer(function (req, res) {
-  res.write('A Monk in Cloud'); //write a response to the client
-  res.end(); //end the response
-}).listen(80); 
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+// http.createServer(function (req, res) {
+//   res.write('A Monk in Cloud'); //write a response to the client
+//   res.end(); //end the response
+// }).listen(80); 
