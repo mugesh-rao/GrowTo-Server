@@ -46,7 +46,6 @@ app.use(errorHandler);
 //   { folder: 'machines', public_id: "ravana" }, 
 //   function(error, result) {console.log(result); });
 app.listen(PORT, () => {
-   res.write('A Monk in Cloud');
   console.log(`Server Running on http://localhost:${PORT}/api/user/machines`);
   // axios.post(`http://api.textmebot.com/send.php?recipient=+916374380946&apikey=Hwd2BzkcxSY4&text=testing`)
 });
