@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 });
 
 // Create and start the HTTP server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 1000;
 const server = http.createServer(app);
 
 server.listen(PORT, () => {

@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema(
     isVerified: Boolean,
     resetPasswordToken: String,
     resetPasswordExpire: Date,
-
     addresses: [addressSchema],
     dob: String,
     verificationCode: String,
